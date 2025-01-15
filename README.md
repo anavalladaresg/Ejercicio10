@@ -24,28 +24,28 @@ Creamos un archivo `docker-compose.yml` con el siguiente contenido:
 ```yml
 services:
   web:
-    image: odoo:17.0
+    image: odoo:17.0 # Usamos la versión 17.0 de Odoo
     depends_on:
-      - db
+      - db # Dependemos del servicio db
     ports:
-      - "8083:8069"
+      - "8083:8069" # Mapeamos el puerto 8069 de Odoo al 8083 del host
   db:
-    image: postgres:15
+    image: postgres:15 # Usamos la versión 15 de Postgres
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD=odoo
-      - POSTGRES_USER=odoo
+      - POSTGRES_DB=postgres # Nombre de la base de datos
+      - POSTGRES_PASSWORD=odoo # Contraseña de la base de datos
+      - POSTGRES_USER=odoo # Usuario de la base de datos
   pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    restart: always
+    image: dpage/pgadmin4 # Usamos la imagen dpage/pgadmin4
+    container_name: pgadmin4_container # Nombre del contenedor
+    restart: always # Reiniciar siempre
     ports:
-      - "8888:80"
+      - "8888:80" # Mapeamos el puerto 80 de pgAdmin al 8888 del host
     environment:
-      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
-      PGADMIN_DEFAULT_PASSWORD: strong-password
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com # Correo de pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: strong-password # Contraseña de pgAdmin
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin # Volumen para persistir los datos
 volumes:
   pgadmin-data:
 ```
@@ -121,6 +121,8 @@ Una vez creemos la base de datos, nos llevará a la siguiente página:
 
 ### ¿Que ocurre si en el ordenador local el puerto 5432 está ocupado? ¿Y si lo estuviese el 8069? ¿Como puedes solucionarlo?
 
-Si los puertos están ocupados, podemos cambiarlos en el archivo `docker-compose.yml` y volver a levantar los servicios con `docker-compose up -d`.
+Si el 5432 está ocupado nos dará error el contenedor de la base de datos, porque es el puerto por defecto de postgres.
 
-Si está ocupado el puerto 8069, debemos cambiar solo el puerto externo de odoo, como ha sido en mi caso, que he cambiado el puerto al 8083.
+Si el 8069 está ocupado nos dará error el contenedor de odoo, porque es el puerto por defecto de odoo.
+
+Para solucionarlo, debemos cambiar los puertos en el archivo `docker-compose.yml` y volver a levantar los servicios con `docker-compose up -d`.
